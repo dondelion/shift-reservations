@@ -313,27 +313,32 @@ export async function createReservation(input: {
       return { ok: false, code: "BLOCKED", message: "That day is not available for shifts." };
     }
 
-    // Only count Mon–Fri non-holiday days toward the weekday limit.
+    // Total limit: all days count.
     const total = await tx.execute({
-      sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ? " +
-           "AND CAST(strftime('%w', date) AS INTEGER) BETWEEN 1 AND 5 " +
-           "AND date NOT IN (SELECT date FROM holidays)",
+      sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ?",
       args: [personnelNumber, month],
     });
     if ((total.rows[0].c as number) >= limit) {
       await tx.rollback();
-      return { ok: false, code: "LIMIT", message: `You already have ${limit} weekday(s) booked this month (the limit).` };
+      return { ok: false, code: "LIMIT", message: `You already have ${limit} day(s) booked this month (the limit).` };
     }
 
+    // Weekend/holiday sub-limit: at most holidayLimit of those days can be weekend or holiday.
+    const [y, mo, d] = date.split("-").map(Number);
+    const dow = new Date(y, mo - 1, d).getDay(); // 0=Sun, 6=Sat
+    const dayIsWeekend = dow === 0 || dow === 6;
     const isHoliday = await tx.execute({ sql: "SELECT 1 FROM holidays WHERE date = ?", args: [date] });
-    if (isHoliday.rows.length) {
-      const hol = await tx.execute({
-        sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ? AND date IN (SELECT date FROM holidays)",
+    const dayIsHoliday = isHoliday.rows.length > 0;
+
+    if (dayIsWeekend || dayIsHoliday) {
+      const whTotal = await tx.execute({
+        sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ? " +
+             "AND (CAST(strftime('%w', date) AS INTEGER) NOT BETWEEN 1 AND 5 OR date IN (SELECT date FROM holidays))",
         args: [personnelNumber, month],
       });
-      if ((hol.rows[0].c as number) >= holidayLimit) {
+      if ((whTotal.rows[0].c as number) >= holidayLimit) {
         await tx.rollback();
-        return { ok: false, code: "HOLIDAY_LIMIT", message: `You can book at most ${holidayLimit} holiday day(s) per month.` };
+        return { ok: false, code: "HOLIDAY_LIMIT", message: `You can only book ${holidayLimit} weekend/holiday day(s) per month.` };
       }
     }
 
