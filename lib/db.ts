@@ -313,13 +313,16 @@ export async function createReservation(input: {
       return { ok: false, code: "BLOCKED", message: "That day is not available for shifts." };
     }
 
+    // Only count Mon–Fri non-holiday days toward the weekday limit.
     const total = await tx.execute({
-      sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ?",
+      sql: "SELECT COUNT(*) AS c FROM reservations WHERE personnel_number = ? AND substr(date,1,7) = ? " +
+           "AND CAST(strftime('%w', date) AS INTEGER) BETWEEN 1 AND 5 " +
+           "AND date NOT IN (SELECT date FROM holidays)",
       args: [personnelNumber, month],
     });
     if ((total.rows[0].c as number) >= limit) {
       await tx.rollback();
-      return { ok: false, code: "LIMIT", message: `You already have ${limit} day(s) booked this month (the limit).` };
+      return { ok: false, code: "LIMIT", message: `You already have ${limit} weekday(s) booked this month (the limit).` };
     }
 
     const isHoliday = await tx.execute({ sql: "SELECT 1 FROM holidays WHERE date = ?", args: [date] });

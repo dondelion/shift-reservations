@@ -99,7 +99,7 @@ export default function Home() {
             <div className="month-title">{monthLabel(month)}</div>
             {data && (
               <div className="month-sub">
-                Up to {data.limit} day{data.limit === 1 ? "" : "s"} per person
+                Up to {data.limit} weekday{data.limit === 1 ? "" : "s"} per person
                 {data.holidayLimit > 0 &&
                   ` · max ${data.holidayLimit} holiday`}
               </div>
@@ -311,9 +311,9 @@ function ReserveModal({
         </h3>
         {holidayName && (
           <div className="modal-holiday">
-            ★ {holidayName} — public holiday. Counts toward your monthly limit
+            ★ {holidayName} — public holiday. Does not count toward your weekday limit
             {holidayLimit > 0
-              ? `, and you may book at most ${holidayLimit} holiday day(s) per month.`
+              ? `, but you may book at most ${holidayLimit} holiday day(s) per month.`
               : "."}
           </div>
         )}

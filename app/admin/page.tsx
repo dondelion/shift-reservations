@@ -192,7 +192,7 @@ function SettingsCard({ data, reload, toast }: CardProps) {
       <div className="section-title">Limits &amp; password</div>
       <div className="row" style={{ marginBottom: 14 }}>
         <div className="field">
-          <label htmlFor="s-limit">Max days per person / month</label>
+          <label htmlFor="s-limit">Max weekdays per person / month</label>
           <input
             id="s-limit"
             type="number"
@@ -215,8 +215,7 @@ function SettingsCard({ data, reload, toast }: CardProps) {
         </div>
       </div>
       <p className="muted-note" style={{ marginBottom: 14 }}>
-        Holidays count toward the day limit — e.g. 3 days total, of which at most
-        1 may be a holiday.
+        Weekday limit applies to Mon–Fri non-holiday days. Holidays have their own separate limit. Weekends are not counted.
       </p>
       <div className="field">
         <label htmlFor="s-pw">Change admin password (optional)</label>
