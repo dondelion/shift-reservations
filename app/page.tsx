@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <>
       <div className="page-intro">
-        <h1>Reserve your shift day</h1>
+        <h1>Ramasri Shift — Reserve your day</h1>
         <p>
           Pick an open day below. One person per day — first come, first served.
         </p>

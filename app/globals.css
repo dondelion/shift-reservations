@@ -1,12 +1,15 @@
+/* ============================================================
+   BASE — Light mode + Indigo theme (defaults)
+   ============================================================ */
 :root {
+  /* Layout */
   --bg: #f4f5f9;
   --surface: #ffffff;
   --ink: #1c2030;
   --muted: #6b7180;
   --line: #e7e9f0;
-  --accent: #6366f1;
-  --accent-ink: #4338ca;
-  --accent-soft: #eef0fe;
+
+  /* Calendar semantic (consistent across all themes) */
   --available: #10b981;
   --available-soft: #e7f8f1;
   --available-line: #b7e6d3;
@@ -22,8 +25,91 @@
   --shadow-sm: 0 1px 2px rgba(20, 24, 40, 0.06);
   --shadow-md: 0 8px 24px rgba(20, 24, 40, 0.1);
   --shadow-lg: 0 20px 50px rgba(20, 24, 40, 0.22);
+
+  /* Accent — Indigo (default) */
+  --accent: #6366f1;
+  --accent-ink: #4338ca;
+  --accent-soft: #eef0fe;
+  --btn-primary-fg: #fff;
 }
 
+/* ============================================================
+   THEME ACCENTS — Light mode
+   ============================================================ */
+[data-theme="sky"] {
+  --accent: #0ea5e9;
+  --accent-ink: #0284c7;
+  --accent-soft: #e0f2fe;
+  --btn-primary-fg: #fff;
+}
+
+[data-theme="rose"] {
+  --accent: #f43f5e;
+  --accent-ink: #e11d48;
+  --accent-soft: #fff1f2;
+  --btn-primary-fg: #fff;
+}
+
+[data-theme="amber"] {
+  --accent: #f59e0b;
+  --accent-ink: #b45309;
+  --accent-soft: #fef3c7;
+  --btn-primary-fg: #1c1208;
+}
+
+/* ============================================================
+   DARK MODE — Base overrides
+   ============================================================ */
+[data-mode="dark"] {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --ink: #e8eaf2;
+  --muted: #7c8299;
+  --line: #2a2e3d;
+  --available-soft: rgba(16, 185, 129, 0.1);
+  --available-line: rgba(16, 185, 129, 0.3);
+  --taken-soft: #1e2333;
+  --blocked-soft: rgba(217, 119, 6, 0.08);
+  --holiday-soft: rgba(176, 125, 18, 0.1);
+  --holiday-line: rgba(230, 207, 134, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.75);
+
+  /* Accent — Indigo dark */
+  --accent: #818cf8;
+  --accent-ink: #a5b4fc;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+  --btn-primary-fg: #0f1117;
+}
+
+/* ============================================================
+   THEME ACCENTS — Dark mode
+   ============================================================ */
+[data-mode="dark"][data-theme="sky"] {
+  --accent: #38bdf8;
+  --accent-ink: #7dd3fc;
+  --accent-soft: rgba(56, 189, 248, 0.12);
+  --btn-primary-fg: #0f1117;
+}
+
+[data-mode="dark"][data-theme="rose"] {
+  --accent: #fb7185;
+  --accent-ink: #fda4af;
+  --accent-soft: rgba(251, 113, 133, 0.12);
+  --btn-primary-fg: #0f1117;
+}
+
+[data-mode="dark"][data-theme="amber"] {
+  --accent: #fbbf24;
+  --accent-ink: #fcd34d;
+  --accent-soft: rgba(251, 191, 36, 0.12);
+  --btn-primary-fg: #0f1117;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -45,6 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  transition: background 0.2s, color 0.2s;
 }
 
 a {
@@ -52,14 +139,23 @@ a {
   text-decoration: none;
 }
 
-/* ---------- Header / footer ---------- */
+/* ============================================================
+   Header / footer
+   ============================================================ */
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 28px;
+  padding: 14px 28px;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .brand {
@@ -76,6 +172,7 @@ a {
   height: 12px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  transition: background 0.25s;
 }
 
 .site-nav {
@@ -97,6 +194,55 @@ a {
   color: var(--accent-ink);
 }
 
+/* ---- Theme controls ---- */
+.theme-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.theme-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  outline: 2.5px solid transparent;
+  outline-offset: 2px;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.12s, outline-color 0.12s;
+}
+
+.theme-dot:hover {
+  transform: scale(1.25);
+}
+
+.theme-dot.active {
+  outline-color: var(--ink);
+}
+
+.mode-toggle {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.15s, border-color 0.15s;
+  margin-left: 2px;
+}
+
+.mode-toggle:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
 .site-main {
   flex: 1;
   width: 100%;
@@ -112,13 +258,16 @@ a {
   font-size: 13px;
 }
 
-/* ---------- Cards & headings ---------- */
+/* ============================================================
+   Cards & headings
+   ============================================================ */
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   padding: 24px;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .page-intro {
@@ -137,7 +286,9 @@ a {
   font-size: 15px;
 }
 
-/* ---------- Month navigation ---------- */
+/* ============================================================
+   Month navigation
+   ============================================================ */
 .month-bar {
   display: flex;
   align-items: center;
@@ -187,7 +338,9 @@ a {
   cursor: not-allowed;
 }
 
-/* ---------- Calendar grid ---------- */
+/* ============================================================
+   Calendar grid
+   ============================================================ */
 .weekday-row {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -224,8 +377,7 @@ a {
   padding: 6px;
   font-family: inherit;
   background: var(--surface);
-  transition: transform 0.08s, box-shadow 0.15s, background 0.15s,
-    border-color 0.15s;
+  transition: transform 0.08s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
 }
 
 .day-cell.empty {
@@ -307,7 +459,7 @@ a {
   color: var(--accent-ink);
 }
 
-/* holiday — a star badge; available holidays get a gold border */
+/* holiday star badge */
 .holiday-star {
   position: absolute;
   top: 4px;
@@ -331,7 +483,7 @@ a {
   color: var(--holiday);
 }
 
-/* locked — available day in a month that isn't open for reservations */
+/* locked */
 .day-cell.locked {
   cursor: not-allowed;
   background: var(--bg);
@@ -349,7 +501,70 @@ a {
   color: #cdb98a;
 }
 
-/* ---------- Legend ---------- */
+/* ============================================================
+   Dark mode — calendar cell overrides (hardcoded colors)
+   ============================================================ */
+[data-mode="dark"] .day-cell {
+  background: #1e2233;
+}
+
+[data-mode="dark"] .day-cell.empty {
+  background: transparent;
+}
+
+[data-mode="dark"] .day-cell.available {
+  color: #34d399;
+}
+
+[data-mode="dark"] .day-cell.available .day-num {
+  color: #6ee7b7;
+}
+
+[data-mode="dark"] .day-cell.available.is-holiday {
+  color: #fbbf24;
+}
+
+[data-mode="dark"] .day-cell.available.is-holiday .day-num {
+  color: #fcd34d;
+}
+
+[data-mode="dark"] .day-cell.taken {
+  color: var(--muted);
+}
+
+[data-mode="dark"] .day-cell.taken .day-num {
+  color: #4a5068;
+}
+
+[data-mode="dark"] .day-cell.blocked {
+  border-color: rgba(217, 119, 6, 0.2);
+}
+
+[data-mode="dark"] .day-cell.past {
+  color: #3a3f52;
+}
+
+[data-mode="dark"] .day-cell.past .day-num {
+  color: #3a3f52;
+}
+
+[data-mode="dark"] .day-cell.locked {
+  background: transparent;
+  color: #3a3f52;
+}
+
+[data-mode="dark"] .day-cell.locked .day-num,
+[data-mode="dark"] .day-cell.locked .day-icon {
+  color: #3a3f52;
+}
+
+[data-mode="dark"] .day-cell.locked .holiday-star {
+  color: #5c4e24;
+}
+
+/* ============================================================
+   Legend
+   ============================================================ */
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -396,7 +611,9 @@ a {
   border-style: dashed;
 }
 
-/* ---------- Banner (month closed / scheduled) ---------- */
+/* ============================================================
+   Banner
+   ============================================================ */
 .banner {
   border-radius: 11px;
   padding: 11px 14px;
@@ -416,7 +633,9 @@ a {
   color: var(--blocked);
 }
 
-/* ---------- Forms ---------- */
+/* ============================================================
+   Forms
+   ============================================================ */
 .field {
   margin-bottom: 14px;
 }
@@ -439,7 +658,16 @@ a {
   font-family: inherit;
   color: var(--ink);
   background: var(--surface);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.2s;
+}
+
+[data-mode="dark"] .field input,
+[data-mode="dark"] .field select {
+  background: #13161f;
+}
+
+[data-mode="dark"] .field input::placeholder {
+  color: #3e4457;
 }
 
 .field input:focus,
@@ -449,6 +677,14 @@ a {
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
+.field select option {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -475,7 +711,7 @@ a {
 
 .btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--btn-primary-fg);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -492,6 +728,10 @@ a {
   background: var(--bg);
 }
 
+[data-mode="dark"] .btn-ghost:hover:not(:disabled) {
+  background: var(--line);
+}
+
 .btn-danger {
   background: var(--surface);
   border-color: #f3c2cb;
@@ -502,11 +742,21 @@ a {
   background: #fdeef0;
 }
 
+[data-mode="dark"] .btn-danger {
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+[data-mode="dark"] .btn-danger:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.1);
+}
+
 .btn-block {
   width: 100%;
 }
 
-/* ---------- Modal ---------- */
+/* ============================================================
+   Modal
+   ============================================================ */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -520,6 +770,10 @@ a {
   animation: fade 0.15s ease;
 }
 
+[data-mode="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
 .modal {
   background: var(--surface);
   border-radius: 16px;
@@ -528,6 +782,10 @@ a {
   max-width: 380px;
   padding: 24px;
   animation: pop 0.16s ease;
+}
+
+[data-mode="dark"] .modal {
+  border: 1px solid var(--line);
 }
 
 .modal h3 {
@@ -557,6 +815,10 @@ a {
   margin: 12px 0 4px;
 }
 
+[data-mode="dark"] .modal-holiday {
+  color: #fbbf24;
+}
+
 .modal-actions {
   display: flex;
   gap: 10px;
@@ -568,9 +830,7 @@ a {
 }
 
 @keyframes fade {
-  from {
-    opacity: 0;
-  }
+  from { opacity: 0; }
 }
 
 @keyframes pop {
@@ -580,7 +840,9 @@ a {
   }
 }
 
-/* ---------- Toast ---------- */
+/* ============================================================
+   Toast
+   ============================================================ */
 .toast {
   position: fixed;
   left: 50%;
@@ -612,7 +874,9 @@ a {
   }
 }
 
-/* ---------- Tables / lists ---------- */
+/* ============================================================
+   Tables / lists
+   ============================================================ */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -636,6 +900,10 @@ a {
 
 .data-table tr:last-child td {
   border-bottom: none;
+}
+
+[data-mode="dark"] .data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .empty-state {
@@ -670,6 +938,10 @@ a {
   background: var(--available-soft);
   color: #0c7a55;
 }
+[data-mode="dark"] .status-pill.open {
+  color: #34d399;
+}
+
 .status-pill.closed {
   background: var(--blocked-soft);
   color: var(--blocked);
@@ -704,7 +976,9 @@ a {
   color: var(--muted);
 }
 
-/* ---------- Misc ---------- */
+/* ============================================================
+   Misc
+   ============================================================ */
 .section-title {
   font-size: 15px;
   font-weight: 700;
@@ -745,6 +1019,10 @@ a {
   color: #0c7a55;
 }
 
+[data-mode="dark"] .pill.ok {
+  color: #34d399;
+}
+
 .tag-link {
   font-size: 13px;
   font-weight: 600;
@@ -763,6 +1041,14 @@ a {
 }
 
 @media (max-width: 560px) {
+  .site-header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .theme-controls {
+    padding-left: 8px;
+  }
   .site-main {
     padding: 24px 14px 36px;
   }

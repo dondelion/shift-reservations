@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { ThemeProvider } from "./theme-provider";
+import { ThemeControls } from "./theme-controls";
 
 export const metadata: Metadata = {
-  title: "Shift Reservations",
-  description: "Reserve a day for your shift — first come, first served.",
+  title: "Ramasri Shift",
+  description: "Ramasri Shift — reserve your shift day, first come, first served.",
 };
 
 export default function RootLayout({
@@ -13,24 +15,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="indigo" data-mode="light" suppressHydrationWarning>
       <body>
-        <header className="site-header">
-          <Link href="/" className="brand">
-            <span className="brand-dot" />
-            Shift Reservations
-          </Link>
-          <nav className="site-nav">
-            <Link href="/">Calendar</Link>
-            <Link href="/my">My Days</Link>
-            <Link href="/scoreboard">Scoreboard</Link>
-            <Link href="/admin">Admin</Link>
-          </nav>
-        </header>
-        <main className="site-main">{children}</main>
-        <footer className="site-footer">
-          First come, first served &middot; one person per day
-        </footer>
+        {/* Runs synchronously before first paint — prevents flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('rs_theme')||'indigo';var m=localStorage.getItem('rs_mode')||'light';document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-mode',m);}catch(e){}`,
+          }}
+        />
+        <ThemeProvider>
+          <header className="site-header">
+            <Link href="/" className="brand">
+              <span className="brand-dot" />
+              Ramasri Shift
+            </Link>
+            <div className="header-right">
+              <nav className="site-nav">
+                <Link href="/">Calendar</Link>
+                <Link href="/my">My Days</Link>
+                <Link href="/scoreboard">Scoreboard</Link>
+                <Link href="/admin">Admin</Link>
+              </nav>
+              <ThemeControls />
+            </div>
+          </header>
+          <main className="site-main">{children}</main>
+          <footer className="site-footer">
+            Ramasri Shift &middot; first come, first served &middot; one person per day
+            &nbsp;&middot;&nbsp; made by <strong>Don</strong>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );
