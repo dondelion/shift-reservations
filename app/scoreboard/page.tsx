@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { currentMonth, formatLong, monthLabel, shiftMonth } from "@/lib/calendar";
+import { LavaLoader } from "@/app/loaders";
 
 type DayRecord = { date: string; dayType: "weekday" | "weekend_holiday" };
 
@@ -75,7 +76,7 @@ export default function Scoreboard() {
         </div>
 
         {entries === null ? (
-          <div className="spinner-line">Loading…</div>
+          <LavaLoader />
         ) : entries.length === 0 ? (
           <div className="empty-state">No reservations found.</div>
         ) : (

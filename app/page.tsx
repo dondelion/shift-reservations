@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LavaLoader } from "./loaders";
 import {
   WEEKDAYS,
   buildGrid,
@@ -136,7 +137,7 @@ export default function Home() {
         </div>
 
         {!data ? (
-          <div className="spinner-line">Loading availability…</div>
+          <LavaLoader />
         ) : (
           <div className="day-grid">
             {cells.map((date, i) => {

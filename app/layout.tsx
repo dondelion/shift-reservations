@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { ThemeProvider } from "./theme-provider";
 import { ThemeControls } from "./theme-controls";
+import { LoaderDefs } from "./loaders";
 
 export const metadata: Metadata = {
   title: "Ramasri Shift",
@@ -23,6 +24,7 @@ export default function RootLayout({
             __html: `try{var t=localStorage.getItem('rs_theme')||'indigo';var m=localStorage.getItem('rs_mode')||'light';document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-mode',m);}catch(e){}`,
           }}
         />
+        <LoaderDefs />
         <ThemeProvider>
           <header className="site-header">
             <Link href="/" className="brand">
