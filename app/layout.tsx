@@ -42,7 +42,7 @@ export default function RootLayout({
           <main className="site-main">{children}</main>
           <footer className="site-footer">
             Ramasri Shift &middot; first come, first served &middot; one person per day
-            &nbsp;&middot;&nbsp; made by <strong>Don</strong>
+            <span className="footer-credit">&nbsp;&#x2767;&nbsp;don</span>
           </footer>
         </ThemeProvider>
       </body>
